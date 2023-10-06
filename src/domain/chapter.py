@@ -1,4 +1,4 @@
-from ebooklib.epub import EpubItem
+from ebooklib.epub import EpubItem, EpubHtml
 
 
 class Chapter:
@@ -6,4 +6,7 @@ class Chapter:
         self._chapter = chapter
 
     def get_content(self):
-        pass
+        if isinstance(self._chapter, EpubHtml):
+            return self._chapter.get_body_content().decode("utf-8")
+
+        return self._chapter.get_content().decode("utf-8")

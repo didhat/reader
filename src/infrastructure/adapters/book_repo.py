@@ -15,8 +15,11 @@ class BookFileFSRepository:
     def __init__(self, book_folder: Path):
         self._book_folder = book_folder
 
-    async def get_book(self, book_id: str):
+    async def get_book(self, book_id: str) -> EpubXBook | None:
         file = self._book_folder / book_id
+
+        if not file.exists():
+            return None
 
         book = epub.read_epub(file.name, {"ignore_ncx": True})
 
