@@ -33,3 +33,4 @@ env.host
 .env
 *.egg-info
 *.epub
+books

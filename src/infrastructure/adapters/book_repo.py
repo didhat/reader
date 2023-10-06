@@ -16,12 +16,12 @@ class BookFileFSRepository:
         self._book_folder = book_folder
 
     async def get_book(self, book_id: str) -> EpubXBook | None:
-        file = self._book_folder / book_id
+        file = self._book_folder / f"{book_id}.epub"
 
         if not file.exists():
             return None
 
-        book = epub.read_epub(file.name, {"ignore_ncx": True})
+        book = epub.read_epub(f"{self._book_folder.name}/{file.name}", {"ignore_ncx": True})
 
         return EpubXBook(EpubBookWithMethods(book))
 
