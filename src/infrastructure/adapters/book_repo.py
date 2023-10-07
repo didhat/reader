@@ -1,5 +1,6 @@
+import shutil
 from pathlib import Path
-from io import BytesIO
+from tempfile import SpooledTemporaryFile
 
 import ebooklib
 from ebooklib import epub
@@ -25,8 +26,14 @@ class BookFileFSRepository:
 
         return EpubXBook(EpubBookWithMethods(book))
 
-    async def add_book_file(self, book):
-        pass
+    async def add_book_file(self, book_file: SpooledTemporaryFile, book_id: str):
+        file_for_save = self._book_folder / f"{book_id}.epub"
+
+        if file_for_save.exists():
+            raise
+
+        with file_for_save.open(mode="wb") as f:
+            shutil.copyfileobj(book_file, f)
 
     async def delete_book_file(self, book_id: str):
         pass

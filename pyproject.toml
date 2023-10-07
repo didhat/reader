@@ -11,6 +11,7 @@ ebooklib = "^0.18"
 attrs = "^23.1.0"
 fastapi = "^0.103.2"
 uvicorn = "^0.23.2"
+python-multipart = "^0.0.6"
 
 
 [build-system]

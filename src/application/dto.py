@@ -1,5 +1,7 @@
 import attrs
 
+from tempfile import SpooledTemporaryFile
+
 from src.domain.chapter import Chapter
 
 
@@ -12,3 +14,12 @@ class ChapterHtmlFileDTO:
         content = chapter.get_content()
 
         return cls(content=content)
+
+
+@attrs.define
+class BookForUploadDTO:
+    file: SpooledTemporaryFile
+    filename: str
+    format: str
+    book_title: str
+    book_author: str
