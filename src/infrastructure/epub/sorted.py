@@ -25,10 +25,10 @@ class EpubBookWithMethods:
         return self._chapters
 
     def get_chapter_by_number(self, number: int) -> EpubItem | None:
-        if number > len(self._chapters):
+        if number - 1 > len(self._chapters) or number <= 0:
             return None
 
-        return self._chapters[number]
+        return self._chapters[number-1]
 
     def _get_item_by_id(self, item_id: str):
         for item in self._book.items:
