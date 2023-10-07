@@ -36,7 +36,9 @@ class BookFileFSRepository:
             shutil.copyfileobj(book_file, f)
 
     async def delete_book_file(self, book_id: str):
-        pass
+        file_for_delete = self._book_folder / f"{book_id}.epub"
+        file_for_delete.unlink(missing_ok=True)
+
 
 # if __name__ == "__main__":
 #     book = epub.read_epub("test2.epub", {"ignore_ncx": True})

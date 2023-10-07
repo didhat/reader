@@ -27,3 +27,7 @@ async def upload_book(book_file: Annotated[UploadFile, Form()], title: Annotated
 
     await book_service.upload_book(upload)
 
+
+@books.delete("/books/{book_id}")
+async def delete_book(book_id: str, book_service: BookService = Depends(get_book_service)):
+    await book_service.delete_book(book_id)

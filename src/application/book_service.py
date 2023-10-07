@@ -23,4 +23,7 @@ class BookService:
     async def upload_book(self, upload: dto.BookForUploadDTO):
         await self._book_file_repository.add_book_file(upload.file, upload.book_title)
 
+    async def delete_book(self, book_id: str):
+        await self._book_file_repository.delete_book_file(book_id)
+
 
