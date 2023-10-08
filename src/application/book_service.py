@@ -9,6 +9,13 @@ class BookService:
         self._book_file_repository = book_file_repo
         self._book_data_repo = book_data_repo
 
+    async def get_book_by_id(self, book_id: int):
+        book = await self._book_data_repo.get_book_by_id(book_id)
+        if book is None:
+            raise BookNotFound()
+
+        return book
+
     async def get_book_chapter(self, book_id: str, chapter_number):
         book = await self._book_file_repository.get_book(book_id)
 
@@ -27,5 +34,3 @@ class BookService:
 
     async def delete_book(self, book_id: str):
         await self._book_file_repository.delete_book_file(book_id)
-
-
