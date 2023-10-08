@@ -9,15 +9,13 @@ from src.application.book_service import BookService
 from src.presentation.providers.book_service import get_book_service
 from src import get_root_path
 from src.presentation.entrypoints.book import books
-
-from pathlib import Path
+from src.infrastructure.di.factories import book_info_repo_factory, book_service_factory
 
 
 async def setup_app():
     engine = create_async_engine("sqlite+aiosqlite:///test.db")
 
     session_maker = async_sessionmaker(engine, expire_on_commit=False)
-
 
     book_folder = get_root_path() / "books"
 
@@ -26,12 +24,13 @@ async def setup_app():
 
     books_file_repo = BookFileFSRepository(book_folder)
 
-    books_service = BookService(books_file_repo)
+    _book_info_repo_factory = book_info_repo_factory(session_maker)
+    _book_service_factory = book_service_factory(books_file_repo, _book_info_repo_factory)
 
     app = FastAPI()
     app.include_router(books)
 
-    app.dependency_overrides[get_book_service] = lambda: books_service
+    app.dependency_overrides[get_book_service] = _book_service_factory
 
     return app
 
