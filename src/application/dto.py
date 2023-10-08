@@ -18,8 +18,12 @@ class ChapterHtmlFileDTO:
 
 @attrs.define
 class BookForUploadDTO:
-    file: SpooledTemporaryFile
-    filename: str
     format: str
     book_title: str
     book_author: str
+
+
+@attrs.define
+class BookForUploadWithFileDTO(BookForUploadDTO):
+    file: SpooledTemporaryFile
+    filename: str

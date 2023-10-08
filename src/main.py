@@ -1,7 +1,8 @@
 import asyncio
 
-from fastapi import FastAPI
 import uvicorn
+from fastapi import FastAPI
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
 from src.infrastructure.adapters.book_repo import BookFileFSRepository
 from src.application.book_service import BookService
@@ -13,6 +14,10 @@ from pathlib import Path
 
 
 async def setup_app():
+    engine = create_async_engine("sqlite+aiosqlite:///test.db")
+
+    session_maker = async_sessionmaker(engine, expire_on_commit=False)
+
 
     book_folder = get_root_path() / "books"
 

@@ -1,4 +1,4 @@
-import ebooklib
+import attrs
 
 from src.infrastructure.epub.sorted import EpubBookWithMethods
 from src.domain.chapter import Chapter
@@ -21,4 +21,10 @@ class EpubXBook:
 
         return Chapter(chapter)
 
+
+@attrs.define
+class Book:
+    book_id: int
+    title: str
+    author: str
 
