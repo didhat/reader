@@ -30,6 +30,7 @@ class BookService:
         return dto.ChapterHtmlFileDTO.from_chapter(chapter)
 
     async def upload_book(self, upload: dto.BookForUploadWithFileDTO):
+        await self._book_data_repo.add_book(upload)
         await self._book_file_repository.add_book_file(upload.file, upload.book_title)
 
     async def delete_book(self, book_id: str):
