@@ -34,3 +34,4 @@ env.host
 *.egg-info
 *.epub
 books
+test.db
