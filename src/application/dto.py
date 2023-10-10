@@ -27,3 +27,9 @@ class BookForUploadDTO:
 class BookForUploadWithFileDTO(BookForUploadDTO):
     file: SpooledTemporaryFile
     filename: str
+
+
+@attrs.define
+class BookForUploadWithFileAndMetadataDTO:
+    upload: BookForUploadWithFileDTO
+    chapter_number: int

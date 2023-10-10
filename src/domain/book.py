@@ -27,4 +27,5 @@ class Book:
     book_id: int
     title: str
     author: str
+    chapter_number: int
 

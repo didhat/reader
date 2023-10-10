@@ -23,23 +23,25 @@ class BookDataRepository:
         if raw is None:
             return None
 
-        book_id, title, author, _, _ = raw
+        book_id, title, author, chapter_number, _ = raw
 
-        return Book(book_id=book_id, title=title, author=author)
+        return Book(
+            book_id=book_id, title=title, author=author, chapter_number=chapter_number
+        )
 
-    async def add_book(self, book: dto.BookForUploadDTO) -> int:
+    async def add_book(self, book: dto.BookForUploadWithFileAndMetadataDTO) -> int:
         raw = await self._session.execute(
             insert(book_table)
             .values(
                 {
-                    "title": book.book_title,
-                    "author": book.book_author,
-                    "chapter_number": 1,
+                    "title": book.upload.book_title,
+                    "author": book.upload.book_author,
+                    "chapter_number": book.chapter_number,
                 }
             )
             .returning(book_table.c.id)
         )
-        book_id, = raw.one()
+        (book_id,) = raw.one()
         await self._session.commit()
 
         return int(book_id)

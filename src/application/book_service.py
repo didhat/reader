@@ -2,6 +2,7 @@ from src.infrastructure.adapters.book_repo import BookFileFSRepository
 from src.application.exceptions import BookNotFound, ChapterNotFound
 from src.application import dto
 from src.infrastructure.adapters.book_data_repo import BookDataRepository
+from src.infrastructure.epub.load import load_epub_from_upload
 
 
 class BookService:
@@ -32,7 +33,15 @@ class BookService:
         return dto.ChapterHtmlFileDTO.from_chapter(chapter)
 
     async def upload_book(self, upload: dto.BookForUploadWithFileDTO):
-        book_id = await self._book_data_repo.add_book(upload)
+        epub_book = load_epub_from_upload(upload.file, upload.filename)
+
+        ch_number = len(epub_book.get_chapters_in_order())
+
+        for_adding = dto.BookForUploadWithFileAndMetadataDTO(
+            upload=upload, chapter_number=ch_number
+        )
+
+        book_id = await self._book_data_repo.add_book(for_adding)
         await self._book_file_repository.add_book_file(upload.file, str(book_id))
 
         return book_id
