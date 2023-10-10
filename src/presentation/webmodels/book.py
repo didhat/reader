@@ -11,3 +11,7 @@ class BookInfoResponse(BaseModel):
     @classmethod
     def from_book(cls, book: Book):
         return BookInfoResponse(title=book.title, author=book.author, book_id=book.book_id)
+
+
+class BookUploadedResponse(BaseModel):
+    book_id: int

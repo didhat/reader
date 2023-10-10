@@ -5,7 +5,9 @@ from src.infrastructure.adapters.book_data_repo import BookDataRepository
 
 
 class BookService:
-    def __init__(self, book_file_repo: BookFileFSRepository, book_data_repo: BookDataRepository):
+    def __init__(
+        self, book_file_repo: BookFileFSRepository, book_data_repo: BookDataRepository
+    ):
         self._book_file_repository = book_file_repo
         self._book_data_repo = book_data_repo
 
@@ -30,8 +32,11 @@ class BookService:
         return dto.ChapterHtmlFileDTO.from_chapter(chapter)
 
     async def upload_book(self, upload: dto.BookForUploadWithFileDTO):
-        await self._book_data_repo.add_book(upload)
-        await self._book_file_repository.add_book_file(upload.file, upload.book_title)
+        book_id = await self._book_data_repo.add_book(upload)
+        await self._book_file_repository.add_book_file(upload.file, str(book_id))
 
-    async def delete_book(self, book_id: str):
-        await self._book_file_repository.delete_book_file(book_id)
+        return book_id
+
+    async def delete_book(self, book_id: int):
+        await self._book_data_repo.delete_book_by_id(book_id)
+        await self._book_file_repository.delete_book_file(str(book_id))

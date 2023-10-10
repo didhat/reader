@@ -20,12 +20,14 @@ async def setup_app():
     book_folder = get_root_path() / "books"
 
     if not book_folder.exists():
-        raise
+        raise Exception("Book folder does not exist")
 
     books_file_repo = BookFileFSRepository(book_folder)
 
     _book_info_repo_factory = book_info_repo_factory(session_maker)
-    _book_service_factory = book_service_factory(books_file_repo, _book_info_repo_factory)
+    _book_service_factory = book_service_factory(
+        books_file_repo, _book_info_repo_factory
+    )
 
     app = FastAPI()
     app.include_router(books)
