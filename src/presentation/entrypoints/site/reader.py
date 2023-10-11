@@ -1,0 +1,28 @@
+import jinja2
+from fastapi import APIRouter, Depends, Request
+from fastapi.responses import HTMLResponse
+
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+
+from src.presentation.providers.book_service import get_book_service
+from src.application.book_service import BookService
+
+
+reader = APIRouter()
+templates = Jinja2Templates(directory="src/presentation/templates")
+
+
+@reader.get("/book/{book_id}/read/{chapter_number}", response_class=HTMLResponse)
+async def get_book_read(
+    request: Request,
+    book_id: str,
+    chapter_number: int,
+    book_service: BookService = Depends(get_book_service),
+):
+    chapter = await book_service.get_book_chapter(book_id, chapter_number)
+
+    return templates.TemplateResponse(
+        "book.html", {"request": request, "chapter_text": chapter.content}
+    )
