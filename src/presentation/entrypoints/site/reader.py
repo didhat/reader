@@ -1,14 +1,9 @@
-import jinja2
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
-
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from src.presentation.providers.book_service import get_book_service
 from src.application.book_service import BookService
-
+from src.presentation.providers.book_service import get_book_service
 
 reader = APIRouter()
 templates = Jinja2Templates(directory="src/presentation/templates")
