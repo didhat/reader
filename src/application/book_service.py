@@ -12,6 +12,11 @@ class BookService:
         self._book_file_repository = book_file_repo
         self._book_data_repo = book_data_repo
 
+    async def get_books(self, query: dto.BookQuery):
+        books = await self._book_data_repo.get_books_by_query(query)
+
+        return books
+
     async def get_book_by_id(self, book_id: int):
         book = await self._book_data_repo.get_book_by_id(book_id)
         if book is None:

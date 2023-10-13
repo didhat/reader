@@ -2,11 +2,17 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, UploadFile, Form
 from fastapi.datastructures import FormData
+from fastapi_filter import FilterDepends
 
+from src.presentation.filters.book import BookFilter
 from src.presentation.providers.book_service import get_book_service
 from src.application.book_service import BookService
 from src.presentation.webmodels.chapter import ChapterResponse
-from src.presentation.webmodels.book import BookInfoResponse, BookUploadedResponse
+from src.presentation.webmodels.book import (
+    BookInfoResponse,
+    BookUploadedResponse,
+    ManyBookResponse,
+)
 from src.application import dto
 
 books = APIRouter()
@@ -55,3 +61,17 @@ async def get_book_info(
     book = await book_service.get_book_by_id(book_id)
 
     return BookInfoResponse.from_book(book)
+
+
+@books.get("/books")
+async def get_books(
+    page: int,
+    page_size: int,
+    book_filter: BookFilter = FilterDepends(BookFilter),
+    book_service: BookService = Depends(get_book_service),
+):
+    user_books = await book_service.get_books(
+        dto.BookQuery(page=page, page_size=page_size, filter=book_filter)
+    )
+
+    return ManyBookResponse.from_books(user_books)

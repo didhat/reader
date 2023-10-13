@@ -25,9 +25,9 @@ async def setup_app():
 
     books_file_repo = BookFileFSRepository(book_folder)
 
-    _book_info_repo_factory = book_info_repo_factory(session_maker)
+    _book_info_repo_factory = book_info_repo_factory()
     _book_service_factory = book_service_factory(
-        books_file_repo, _book_info_repo_factory
+        books_file_repo, session_maker, _book_info_repo_factory
     )
 
     app = FastAPI()

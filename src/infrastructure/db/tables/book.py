@@ -13,4 +13,3 @@ book_table = Table(
     Column("chapter_number", Integer),
     Column("added_time", DateTime, server_default=func.now())
 )
-

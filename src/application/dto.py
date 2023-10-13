@@ -3,6 +3,7 @@ import attrs
 from tempfile import SpooledTemporaryFile
 
 from src.domain.chapter import Chapter
+from src.presentation.filters.book import BookFilter
 
 
 @attrs.define
@@ -33,3 +34,13 @@ class BookForUploadWithFileDTO(BookForUploadDTO):
 class BookForUploadWithFileAndMetadataDTO:
     upload: BookForUploadWithFileDTO
     chapter_number: int
+
+
+@attrs.define
+class BookQuery:
+    page: int
+    page_size: int
+    filter: BookFilter
+
+    def get_page_start(self):
+        return self.page * self.page_size

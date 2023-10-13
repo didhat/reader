@@ -21,3 +21,11 @@ class BookInfoResponse(BaseModel):
 
 class BookUploadedResponse(BaseModel):
     book_id: int
+
+
+class ManyBookResponse(BaseModel):
+    books: list[BookInfoResponse]
+
+    @classmethod
+    def from_books(cls, books: list[Book]):
+        return ManyBookResponse(books=[BookInfoResponse.from_book(b) for b in books])
