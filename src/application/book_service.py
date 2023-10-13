@@ -3,14 +3,19 @@ from src.application.exceptions import BookNotFound, ChapterNotFound
 from src.application import dto
 from src.infrastructure.adapters.book_data_repo import BookDataRepository
 from src.infrastructure.epub.load import load_epub_from_upload
+from src.infrastructure.adapters.book_cover_repo import BookCoverRepository
 
 
 class BookService:
     def __init__(
-        self, book_file_repo: BookFileFSRepository, book_data_repo: BookDataRepository
+        self,
+        book_file_repo: BookFileFSRepository,
+        book_data_repo: BookDataRepository,
+        book_cover_repo: BookCoverRepository,
     ):
         self._book_file_repository = book_file_repo
         self._book_data_repo = book_data_repo
+        self._book_cover_repo = book_cover_repo
 
     async def get_books(self, query: dto.BookQuery):
         books = await self._book_data_repo.get_books_by_query(query)
@@ -48,6 +53,11 @@ class BookService:
 
         book_id = await self._book_data_repo.add_book(for_adding)
         await self._book_file_repository.add_book_file(upload.file, str(book_id))
+
+        cover = epub_book.get_cover()
+
+        if cover:
+            await self._book_cover_repo.upload_book_cover(cover, str(book_id))
 
         return book_id
 

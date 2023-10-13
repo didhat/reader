@@ -1,6 +1,7 @@
-import attrs
-
+import enum
 from tempfile import SpooledTemporaryFile
+
+import attrs
 
 from src.domain.chapter import Chapter
 from src.presentation.filters.book import BookFilter
@@ -44,3 +45,15 @@ class BookQuery:
 
     def get_page_start(self):
         return self.page * self.page_size
+
+
+class CoverFormat(enum.StrEnum):
+    png = "png"
+    jpeg = "jpeg"
+
+
+@attrs.define
+class BookCoverFile:
+    file: bytes
+    format: str
+
