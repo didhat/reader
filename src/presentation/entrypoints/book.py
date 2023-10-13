@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, UploadFile, Form, Response
+from fastapi import APIRouter, Depends, UploadFile, Form, Response, Request
 from fastapi.datastructures import FormData
 from fastapi_filter import FilterDepends
 
@@ -10,6 +10,7 @@ from src.application.book_service import BookService
 from src.presentation.webmodels.chapter import ChapterResponse
 from src.presentation.webmodels.book import (
     BookInfoResponse,
+    BookInfoWithCoverResponse,
     BookUploadedResponse,
     ManyBookResponse,
 )
@@ -56,15 +57,18 @@ async def delete_book(
 
 @books.get("/books/{book_id}")
 async def get_book_info(
-    book_id: int, book_service: BookService = Depends(get_book_service)
-) -> BookInfoResponse:
+    request: Request,
+    book_id: int,
+    book_service: BookService = Depends(get_book_service),
+) -> BookInfoWithCoverResponse:
     book = await book_service.get_book_by_id(book_id)
 
-    return BookInfoResponse.from_book(book)
+    return BookInfoWithCoverResponse.from_book_with_link(book, request)
 
 
 @books.get("/books")
 async def get_books(
+    request: Request,
     page: int,
     page_size: int,
     book_filter: BookFilter = FilterDepends(BookFilter),
@@ -74,7 +78,7 @@ async def get_books(
         dto.BookQuery(page=page, page_size=page_size, filter=book_filter)
     )
 
-    return ManyBookResponse.from_books(user_books)
+    return ManyBookResponse.from_books(user_books, request)
 
 
 @books.get("/books/{book_id}/cover")

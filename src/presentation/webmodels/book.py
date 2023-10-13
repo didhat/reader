@@ -1,3 +1,5 @@
+from typing import overload
+from fastapi import Request
 from pydantic import BaseModel
 
 from src.domain.book import Book
@@ -23,9 +25,27 @@ class BookUploadedResponse(BaseModel):
     book_id: int
 
 
-class ManyBookResponse(BaseModel):
-    books: list[BookInfoResponse]
+class BookInfoWithCoverResponse(BookInfoResponse):
+    image_link: str
 
     @classmethod
-    def from_books(cls, books: list[Book]):
-        return ManyBookResponse(books=[BookInfoResponse.from_book(b) for b in books])
+    def from_book_with_link(cls, books: Book, request: Request):
+        return BookInfoWithCoverResponse(
+            title=books.title,
+            author=books.author,
+            book_id=books.book_id,
+            chapter_number=books.chapter_number,
+            image_link=str(request.url_for("get_book_cover", book_id=books.book_id)),
+        )
+
+
+class ManyBookResponse(BaseModel):
+    books: list[BookInfoWithCoverResponse]
+
+    @classmethod
+    def from_books(cls, books: list[Book], request: Request):
+        return ManyBookResponse(
+            books=[
+                BookInfoWithCoverResponse.from_book_with_link(b, request) for b in books
+            ]
+        )
