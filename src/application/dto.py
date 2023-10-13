@@ -50,6 +50,7 @@ class BookQuery:
 class CoverFormat(enum.StrEnum):
     png = "png"
     jpeg = "jpeg"
+    jpg = "jpg"
 
 
 @attrs.define

@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, UploadFile, Form
+from fastapi import APIRouter, Depends, UploadFile, Form, Response
 from fastapi.datastructures import FormData
 from fastapi_filter import FilterDepends
 
@@ -75,3 +75,12 @@ async def get_books(
     )
 
     return ManyBookResponse.from_books(user_books)
+
+
+@books.get("/books/{book_id}/cover")
+async def get_book_cover(
+    book_id: str, book_service: BookService = Depends(get_book_service)
+):
+    cover = await book_service.get_book_cover(book_id)
+
+    return Response(content=cover.file, media_type=f"image/{cover.format}")

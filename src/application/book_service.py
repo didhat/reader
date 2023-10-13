@@ -61,6 +61,14 @@ class BookService:
 
         return book_id
 
+    async def get_book_cover(self, book_id: str) -> dto.BookCoverFile | None:
+        cover = await self._book_cover_repo.get_cover_file(book_id)
+
+        if cover is None:
+            return None
+
+        return cover
+
     async def delete_book(self, book_id: int):
         await self._book_data_repo.delete_book_by_id(book_id)
         await self._book_file_repository.delete_book_file(str(book_id))
