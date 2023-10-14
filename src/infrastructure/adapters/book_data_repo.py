@@ -1,6 +1,4 @@
-import asyncio
-
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, insert
 
 from src.infrastructure.db.tables.book import book_table
