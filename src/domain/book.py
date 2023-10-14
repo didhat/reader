@@ -28,4 +28,3 @@ class Book:
     title: str
     author: str
     chapter_number: int
-
