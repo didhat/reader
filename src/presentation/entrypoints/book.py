@@ -1,20 +1,18 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, UploadFile, Form, Response, Request
-from fastapi.datastructures import FormData
 from fastapi_filter import FilterDepends
 
+from src.application import dto
+from src.application.book_service import BookService
 from src.presentation.filters.book import BookFilter
 from src.presentation.providers.book_service import get_book_service
-from src.application.book_service import BookService
-from src.presentation.webmodels.chapter import ChapterResponse
 from src.presentation.webmodels.book import (
-    BookInfoResponse,
     BookInfoWithCoverResponse,
     BookUploadedResponse,
     ManyBookResponse,
 )
-from src.application import dto
+from src.presentation.webmodels.chapter import ChapterResponse
 
 books = APIRouter()
 
