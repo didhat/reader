@@ -1,4 +1,5 @@
-from typing import Annotated
+from tempfile import SpooledTemporaryFile
+from typing import Annotated, cast
 
 from fastapi import APIRouter, Depends, UploadFile, Form, Response, Request
 from fastapi_filter import FilterDepends
@@ -34,7 +35,7 @@ async def upload_book(
     book_service: BookService = Depends(get_book_service),
 ) -> BookUploadedResponse:
     upload = dto.BookForUploadWithFileDTO(
-        file=book_file.file,
+        file=cast(SpooledTemporaryFile, book_file.file),
         filename=book_file.filename,
         format=book_file.content_type,
         book_title=title,
@@ -84,5 +85,8 @@ async def get_book_cover(
     book_id: str, book_service: BookService = Depends(get_book_service)
 ):
     cover = await book_service.get_book_cover(book_id)
+
+    if cover is None:
+        return None
 
     return Response(content=cover.file, media_type=f"image/{cover.format}")

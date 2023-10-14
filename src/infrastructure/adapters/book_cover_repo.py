@@ -9,7 +9,7 @@ class BookCoverRepository:
 
     async def get_cover_file(self, book_id: str) -> dto.BookCoverFile | None:
         file_path, fmt = self._get_file_path_with_cover(book_id)
-        if file_path is None:
+        if file_path is None or fmt is None:
             return None
 
         return dto.BookCoverFile(file=file_path.read_bytes(), format=fmt)

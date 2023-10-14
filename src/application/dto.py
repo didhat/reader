@@ -20,15 +20,15 @@ class ChapterHtmlFileDTO:
 
 @attrs.define
 class BookForUploadDTO:
-    format: str
-    book_title: str
-    book_author: str
+    format: str | None
+    book_title: str | None
+    book_author: str | None
 
 
 @attrs.define
 class BookForUploadWithFileDTO(BookForUploadDTO):
     file: SpooledTemporaryFile
-    filename: str
+    filename: str | None
 
 
 @attrs.define
@@ -57,4 +57,3 @@ class CoverFormat(enum.StrEnum):
 class BookCoverFile:
     file: bytes
     format: str
-

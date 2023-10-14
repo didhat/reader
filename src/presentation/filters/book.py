@@ -10,4 +10,4 @@ class BookFilter(Filter):
     chapter_number__lte: Optional[int] = None
 
     class Constants(Filter.Constants):
-        model = book_table.c
+        model = book_table.c  # type: ignore

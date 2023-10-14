@@ -7,7 +7,7 @@ from ebooklib import epub
 from src.infrastructure.epub.sorted import EpubBookWithMethods
 
 
-def load_epub_from_upload(file: SpooledTemporaryFile, filename: str):
+def load_epub_from_upload(file: SpooledTemporaryFile, filename: str | None):
     reader = EpubBookWithUploadFromBinary.from_binary(file, filename)
 
     book = reader.book
@@ -18,7 +18,7 @@ def load_epub_from_upload(file: SpooledTemporaryFile, filename: str):
 
 class EpubBookWithUploadFromBinary(epub.EpubReader):
     @classmethod
-    def from_binary(cls, file: SpooledTemporaryFile, filename: str):
+    def from_binary(cls, file: SpooledTemporaryFile, filename: str | None):
         file_copy = create_file_deepcopy(file)
         reader = cls(filename, {"ignore_ncx": True})
 
