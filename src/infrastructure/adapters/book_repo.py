@@ -2,17 +2,13 @@ import shutil
 from pathlib import Path
 from tempfile import SpooledTemporaryFile
 
-import ebooklib
 from ebooklib import epub
-from ebooklib.epub import EpubHtml
-from ebooklib.utils import debug
 
 from src.domain.book import EpubXBook
 from src.infrastructure.epub.sorted import EpubBookWithMethods
 
 
 class BookFileFSRepository:
-
     def __init__(self, book_folder: Path):
         self._book_folder = book_folder
 
@@ -22,7 +18,9 @@ class BookFileFSRepository:
         if not file.exists():
             return None
 
-        book = epub.read_epub(f"{self._book_folder.name}/{file.name}", {"ignore_ncx": True})
+        book = epub.read_epub(
+            f"{self._book_folder.name}/{file.name}", {"ignore_ncx": True}
+        )
 
         return EpubXBook(EpubBookWithMethods(book))
 

@@ -11,5 +11,5 @@ book_table = Table(
     Column("title", String(100)),
     Column("author", String(100)),
     Column("chapter_number", Integer),
-    Column("added_time", DateTime, server_default=func.now())
+    Column("added_time", DateTime, server_default=func.now()),
 )

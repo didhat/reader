@@ -1,20 +1,19 @@
-from typing import Annotated
+from tempfile import SpooledTemporaryFile
+from typing import Annotated, cast
 
 from fastapi import APIRouter, Depends, UploadFile, Form, Response, Request
-from fastapi.datastructures import FormData
 from fastapi_filter import FilterDepends
 
+from src.application import dto
+from src.application.book_service import BookService
 from src.presentation.filters.book import BookFilter
 from src.presentation.providers.book_service import get_book_service
-from src.application.book_service import BookService
-from src.presentation.webmodels.chapter import ChapterResponse
 from src.presentation.webmodels.book import (
-    BookInfoResponse,
     BookInfoWithCoverResponse,
     BookUploadedResponse,
     ManyBookResponse,
 )
-from src.application import dto
+from src.presentation.webmodels.chapter import ChapterResponse
 
 books = APIRouter()
 
@@ -36,7 +35,7 @@ async def upload_book(
     book_service: BookService = Depends(get_book_service),
 ) -> BookUploadedResponse:
     upload = dto.BookForUploadWithFileDTO(
-        file=book_file.file,
+        file=cast(SpooledTemporaryFile, book_file.file),
         filename=book_file.filename,
         format=book_file.content_type,
         book_title=title,
@@ -86,5 +85,8 @@ async def get_book_cover(
     book_id: str, book_service: BookService = Depends(get_book_service)
 ):
     cover = await book_service.get_book_cover(book_id)
+
+    if cover is None:
+        return None
 
     return Response(content=cover.file, media_type=f"image/{cover.format}")
