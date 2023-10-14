@@ -1,0 +1,36 @@
+name: Checks
+
+on: [push]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Display version
+        run: |
+          python -c "import sys; print(sys.version)"
+      - name: Install dependencies
+        run: | 
+          pip install poetry
+          poetry config virtualenvs.create false
+          poetry install --with dev
+      - name: Ruff check
+        run: |
+          ruff .
+      - name: Black check
+        run: |
+          black --check .
+#      - name: Tests
+#        run: |
+#          pytest
+      - name: Mypy check
+        run: |
+          mypy src/
