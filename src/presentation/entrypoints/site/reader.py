@@ -6,7 +6,7 @@ from src.application.book_service import BookService
 from src.presentation.providers.book_service import get_book_service
 
 reader = APIRouter()
-templates = Jinja2Templates(directory="src/presentation/templates")
+templates = Jinja2Templates(directory="webpack/dist")
 
 
 @reader.get("/book/{book_id}/read/{chapter_number}", response_class=HTMLResponse)
@@ -16,8 +16,6 @@ async def get_book_read(
     chapter_number: int,
     book_service: BookService = Depends(get_book_service),
 ):
-    chapter = await book_service.get_book_chapter(book_id, chapter_number)
+    # chapter = await book_service.get_book_chapter(book_id, chapter_number)
 
-    return templates.TemplateResponse(
-        "book.html", {"request": request, "chapter_text": chapter.content}
-    )
+    return templates.TemplateResponse("index.html", {"request": request})
