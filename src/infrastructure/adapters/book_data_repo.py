@@ -10,7 +10,7 @@ class BookDataRepository:
     def __init__(self, session: AsyncSession):
         self._session = session
 
-    async def get_books_by_query(self, query: dto.BookQuery):
+    async def get_books_by_query(self, query: dto.BookQuery) -> list[Book]:
         req = (
             query.filter.filter(
                 select(

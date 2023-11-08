@@ -1,4 +1,5 @@
 import attrs
+import cattrs
 
 from src.infrastructure.epub.sorted import EpubBookWithMethods
 from src.domain.chapter import Chapter
@@ -28,3 +29,6 @@ class Book:
     title: str
     author: str
     chapter_number: int
+
+    def to_dict(self):
+        return cattrs.unstructure(self)

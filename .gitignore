@@ -21,7 +21,7 @@ env.host
 /devicefiles/
 /zont.sublime-workspace
 /node_modules/
-/webpack/node_modules/
+/webui/node_modules/
 
 /.vagrant/
 /htmlcov/
@@ -39,4 +39,4 @@ test.db
 
 static
 
-/webpack/node_modules/
+/webui/node_modules/

@@ -4,6 +4,7 @@ from src.application import dto
 from src.infrastructure.adapters.book_data_repo import BookDataRepository
 from src.infrastructure.epub.load import load_epub_from_upload
 from src.infrastructure.adapters.book_cover_repo import BookCoverRepository
+from src.domain.book import Book
 
 
 class BookService:
@@ -17,7 +18,7 @@ class BookService:
         self._book_data_repo = book_data_repo
         self._book_cover_repo = book_cover_repo
 
-    async def get_books(self, query: dto.BookQuery):
+    async def get_books(self, query: dto.BookQuery) -> list[Book]:
         books = await self._book_data_repo.get_books_by_query(query)
 
         return books
